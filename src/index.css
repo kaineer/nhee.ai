@@ -1,0 +1,32 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root {
+    /* nord palette */
+    --color-nord0: #2e3440;
+    --color-nord1: #3b4252;
+    --color-nord2: #434c5e;
+    --color-nord3: #4c566a;
+    --color-nord4: #5e81ac;
+    --color-nord5: #73daca;
+    --color-nord6: #88c0d0;
+    --color-nord7: #8fbcbb;
+    --color-nord8: #88c0d0;
+    --color-nord9: #81a1c1;
+    --color-nord10: #a3be8c;
+    --color-nord11: #ebcb8b;
+    --color-nord12: #b48ead;
+    --color-nord13: #bf616a;
+    --color-nord14: #d08770;
+    --color-nord15: #e5786d;
+    --color-nord16: #ffffff;
+
+    /* extents */
+    width: 100vw;
+    height: 100vh;
+    overflow-y: none;
+}
