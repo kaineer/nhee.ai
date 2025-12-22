@@ -11,7 +11,7 @@ import clsx from "clsx";
 interface Props {
   symbolType: SymbolType;
   index: number;
-  parentElement: HTMLDivElement;
+  parentElement: HTMLDivElement | null;
 }
 
 export const Part = ({ symbolType, index, parentElement }: Props) => {
@@ -45,11 +45,9 @@ export const Part = ({ symbolType, index, parentElement }: Props) => {
         <Symbol type={symbolType} />
       </div>
 
-      {isAnimating && ref.current && parentElement && <FlipAnimation 
-        from={ref.current}
-        to={parentElement}
-        
-        />}
+      {isAnimating && ref.current && parentElement && (
+        <FlipAnimation from={ref.current} to={parentElement} />
+      )}
     </>
   );
 };

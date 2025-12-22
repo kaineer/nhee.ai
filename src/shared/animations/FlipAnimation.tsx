@@ -5,7 +5,7 @@ interface Props {
   from: HTMLElement;
   to: HTMLElement;
   duration?: number;
-  children: ReactNode;
+  children?: ReactNode;
   onAnimationStart?: () => void;
   onAnimationComplete?: () => void;
   onAnimationCancel?: () => void;
