@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Part } from "../Part/Part";
 import { type SymbolType } from "../Symbol/types";
 import classes from "./Container.module.css";
@@ -14,6 +14,8 @@ export const Container = () => {
     { symbolType: "tag", index: 1 },
     { symbolType: "tree", index: 2 },
   ];
+
+  const ref = useRef(null);
 
   useEffect(() => {
     const symbols = document.querySelectorAll("[data-slug]");
@@ -33,12 +35,18 @@ export const Container = () => {
 
   return (
     <div
+      ref={ref}
       className={classes.container}
       role="main"
       aria-label="Three section layout"
     >
       {parts.map(({ symbolType, index }) => (
-        <Part key={symbolType} symbolType={symbolType} index={index} />
+        <Part
+          key={symbolType}
+          symbolType={symbolType}
+          index={index}
+          parentElement={ref.current}
+        />
       ))}
     </div>
   );
