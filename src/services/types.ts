@@ -20,4 +20,9 @@ export interface LeafNode extends Timestamps {
   content: string;
 }
 
-export type DataNode = FolderNode | LeafNode;
+export interface RootNode {
+  type: "root";
+  children: DataNode[];
+}
+
+export type DataNode = RootNode | FolderNode | LeafNode;

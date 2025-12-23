@@ -1,5 +1,5 @@
 import { markdown } from "markdown";
-import type { DataNode, LeafNode } from "./types";
+import type { DataNode, LeafNode, RootNode } from "./types";
 
 const getSubItem = (item: DataNode, name: string) => {
   const { type } = item;
@@ -10,22 +10,19 @@ const getSubItem = (item: DataNode, name: string) => {
   return void 0;
 };
 
-export const createDataService = (data: DataNode[], path: string) => {
-  const root = {
-    type: "root",
-    children: data,
-  };
-  const parts = path.split("/").filter((part) => part != "");
-  let item: DataNode = root;
-
+const findItem = (root: DataNode, path: string): DataNode | undefined => {
+  let item = root;
+  const parts = path.split("/").filter((part) => part.trim() != "");
   parts.some((part) => {
     item = getSubItem(item, part);
     return typeof item === "undefined";
   });
+  return item;
+};
 
-  // if (typeof item !== "object") {
-  //   throw new Error("path: [" + path + "]");
-  // }
+export const createDataService = (data: DataNode[], path: string) => {
+  const root: RootNode = { type: "root", children: data };
+  const item: DataNode | undefined = findItem(root, path);
 
   const getType = () => {
     return item ? item.type : "none";
