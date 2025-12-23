@@ -2,17 +2,23 @@ import { useEffect, useRef } from "react";
 import { Part } from "../Part/Part";
 import { type SymbolType } from "../Symbol/types";
 import classes from "./Container.module.css";
+import { useNavigate } from "react-router";
 
 interface PartData {
   symbolType: SymbolType;
   index: number;
+  path: string;
 }
 
 export const Container = () => {
+  const navigate = useNavigate();
+
+  const handleExpand = (path: string) => () => navigate(path);
+
   const parts: PartData[] = [
-    { symbolType: "search", index: 0 },
-    { symbolType: "tag", index: 1 },
-    { symbolType: "tree", index: 2 },
+    { symbolType: "search", index: 0, path: "/search" },
+    { symbolType: "tag", index: 1, path: "/tag" },
+    { symbolType: "tree", index: 2, path: "/tree" },
   ];
 
   const ref = useRef(null);
@@ -40,12 +46,12 @@ export const Container = () => {
       role="main"
       aria-label="Three section layout"
     >
-      {parts.map(({ symbolType, index }) => (
+      {parts.map(({ symbolType, index, path }) => (
         <Part
           key={symbolType}
           symbolType={symbolType}
           index={index}
-          parentElement={ref.current}
+          onExpanded={handleExpand(path)}
         />
       ))}
     </div>

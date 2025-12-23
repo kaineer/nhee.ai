@@ -1,5 +1,5 @@
 /* import components */
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Symbol } from "../Symbol/Symbol";
 import type { SymbolType } from "../Symbol/types";
 import { FlipAnimation } from "@shared/animations/FlipAnimation";
@@ -11,10 +11,10 @@ import clsx from "clsx";
 interface Props {
   symbolType: SymbolType;
   index: number;
-  parentElement: HTMLDivElement | null;
+  onExpanded?: () => void;
 }
 
-export const Part = ({ symbolType, index, parentElement }: Props) => {
+export const Part = ({ symbolType, index, onExpanded }: Props) => {
   const partClasses = [classes.part1, classes.part2, classes.part3];
   const partAriaLabels = ["Tag section", "Search section", "Tree section"];
 
@@ -24,14 +24,14 @@ export const Part = ({ symbolType, index, parentElement }: Props) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (ref.current) {
-      console.log({
-        ref: ref.current,
-        parentRef: ref.current?.parentElement,
-      });
-    }
-  }, [ref]);
+  const handleClick = () => {
+    setIsAnimating(true);
+  };
+
+  const animationComplete = () => {
+    setIsAnimating(false);
+    onExpanded?.();
+  };
 
   return (
     <>
@@ -41,12 +41,18 @@ export const Part = ({ symbolType, index, parentElement }: Props) => {
         tabIndex={0}
         aria-label={partAriaLabel}
         data-part-index={index}
+        onClick={handleClick}
       >
         <Symbol type={symbolType} />
       </div>
 
-      {isAnimating && ref.current && parentElement && (
-        <FlipAnimation from={ref.current} to={parentElement} />
+      {isAnimating && ref.current && (
+        <FlipAnimation
+          from={ref.current}
+          to={ref.current.parentElement!}
+          onAnimationComplete={animationComplete}
+          duration={500}
+        />
       )}
     </>
   );

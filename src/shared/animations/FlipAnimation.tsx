@@ -1,3 +1,4 @@
+import { pxbr } from "@shared/dom";
 import { useEffect, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
@@ -6,6 +7,7 @@ interface Props {
   to: HTMLElement;
   duration?: number;
   children?: ReactNode;
+  keepContent?: boolean;
   onAnimationStart?: () => void;
   onAnimationComplete?: () => void;
   onAnimationCancel?: () => void;
@@ -16,6 +18,7 @@ export const FlipAnimation = ({
   to,
   duration = 300,
   children,
+  keepContent = false,
   onAnimationStart,
   onAnimationCancel,
   onAnimationComplete,
@@ -34,10 +37,10 @@ export const FlipAnimation = ({
     const last = to.getBoundingClientRect();
 
     // Inverted delta
-    const deltaX = first.left - last.left;
-    const deltaY = first.top - last.top;
-    const deltaW = first.width / last.width;
-    const deltaH = first.height / last.height;
+    const deltaX = last.left - first.left;
+    const deltaY = last.top - first.top;
+    const deltaW = last.width / first.width;
+    const deltaH = last.height / first.height;
 
     const clone = cloneRef.current;
     if (!clone) {
@@ -54,26 +57,32 @@ export const FlipAnimation = ({
     requestAnimationFrame(() => {
       onAnimationStart?.();
 
-      animationRef.current = clone.animate(
-        [
+      animationRef.current =
+        animationRef.current ||
+        clone.animate(
+          [
+            {
+              transform: "none",
+            },
+            {
+              transform,
+            },
+          ],
           {
-            transform,
+            duration,
+            easing: "cubic-bezier(0.4, 0, 0.2, 1)",
           },
-          {
-            transform: "none",
-          },
-        ],
-        {
-          duration,
-          easing: "cubic-bezier(0.4, 0, 0.2, 1)",
-        },
-      );
+        );
 
       animationRef.current.onfinish = () => {
-        onAnimationComplete?.();
+        if (animationRef.current) {
+          onAnimationComplete?.();
 
-        if (clone.parentNode) {
-          clone.remove();
+          if (clone.parentNode) {
+            // clone.parentNode.removeChild(clone);
+          }
+
+          animationRef.current = null;
         }
       };
 
@@ -102,17 +111,21 @@ export const FlipAnimation = ({
   return createPortal(
     <div
       ref={cloneRef}
+      className={from.className}
       style={{
+        ...pxbr(from.getBoundingClientRect()),
         position: "fixed",
-        top: 0,
-        left: 0,
+        display: "block",
         zIndex: 9999,
         pointerEvents: "none",
         willChange: "transform",
       }}
     >
-      {children ||
-        (from && <div dangerouslySetInnerHTML={{ __html: from.innerHTML }} />)}
+      {keepContent &&
+        (children ||
+          (from && (
+            <div dangerouslySetInnerHTML={{ __html: from.innerHTML }} />
+          )))}
     </div>,
     document.body,
   );
