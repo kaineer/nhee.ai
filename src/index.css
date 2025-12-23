@@ -28,6 +28,10 @@ body {
     --color-nord-snow100: #eceff4;
     --color-nord-snow200: #e5e9f0;
     --color-nord-snow300: #d8dee9;
+
+    --color-search: var(--color-nord-snow100);
+    --color-tag: var(--color-nord-snow200);
+    --color-tree: var(--color-nord-snow300);
 }
 
 #root {
