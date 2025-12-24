@@ -13,6 +13,25 @@ const getSubItem = (item: DataNode, name: string): DataNode | undefined => {
   return void 0;
 };
 
+const unpackPath = (path: string): string[] => {
+  return path
+    .split("/")
+    .map((p) => p.trim())
+    .filter((part) => part != "");
+};
+
+const getParentPath = (path: string): string | null => {
+  const parts = unpackPath(path);
+
+  if (!parts.length) return null;
+  if (parts.length === 1) return "/";
+
+  return parts
+    .slice(0, -1)
+    .map((p) => "/" + p)
+    .join("");
+};
+
 const joinPath = (currentPath: string, subPath: string): string => {
   if (currentPath.endsWith("/")) {
     return currentPath + subPath;
@@ -22,7 +41,8 @@ const joinPath = (currentPath: string, subPath: string): string => {
 
 const findItem = (root: DataNode, path: string): DataNode | undefined => {
   let item: DataNode | undefined = root;
-  const parts = path.split("/").filter((part) => part.trim() != "");
+  const parts = unpackPath(path);
+
   parts.some((part) => {
     if (typeof item !== "undefined") {
       item = getSubItem(item, part);
@@ -66,10 +86,16 @@ export const createTreeService = (data: DataNode[], path: string) => {
     return subItem ? joinPath(path, trimmedSubName) : null;
   };
 
+  const navigateToParent = (): string => {
+    if (!item) return null;
+    return getParentPath(path);
+  };
+
   return {
     getType,
     getItems,
     getContent,
     navigateTo,
+    navigateToParent,
   };
 };
