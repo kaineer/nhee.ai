@@ -1,0 +1,12 @@
+// Project tasks configuration. See https://zed.dev/docs/tasks for documentation.
+//
+// Example:
+[
+  {
+    "label": "ViTest",
+    "command": "npx vitest --run",
+    "use_new_terminal": false,
+    "reveal_target": "dock",
+    "hide": "on_success",
+  },
+]

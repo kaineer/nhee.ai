@@ -265,9 +265,11 @@ describe("createDataService", () => {
   });
 
   describe("navigateToParent", () => {
+    const createDataService = (path: string) =>
+      createTreeService(mockNavigate, path);
     describe("Из корневого уровня", () => {
       it("должен возвращать null при попытке подняться выше корня", () => {
-        const service = createTreeService(mockNavigate, "/");
+        const service = createDataService("/");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBeNull();
       });
@@ -281,13 +283,13 @@ describe("createDataService", () => {
 
     describe("Из папки первого уровня", () => {
       it("должен возвращать путь к корню из папки первого уровня", () => {
-        const service = createTreeService(mockNavigate, "/Документы");
+        const service = createDataService("/Документы");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBe("/");
       });
 
       it('должен возвращать путь к корню из папки "Заметки"', () => {
-        const service = createTreeService(mockNavigate, "/Заметки");
+        const service = createDataService("/Заметки");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBe("/");
       });
@@ -295,34 +297,25 @@ describe("createDataService", () => {
 
     describe("Из вложенной папки", () => {
       it("должен возвращать путь к родительской папке из вложенной", () => {
-        const service = createTreeService(mockNavigate, "/Документы/Работа");
+        const service = createDataService("/Документы/Работа");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBe("/Документы");
       });
 
       it("должен возвращать путь на 2 уровня вверх", () => {
-        const service = createTreeService(
-          mockNavigate,
-          "/Документы/Работа/Проекты",
-        );
+        const service = createDataService("/Документы/Работа/Проекты");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBe("/Документы/Работа");
       });
 
       it("должен возвращать путь к папке из листового элемента", () => {
-        const service = createTreeService(
-          mockNavigate,
-          "/Документы/Работа/Отчет за январь",
-        );
+        const service = createDataService("/Документы/Работа/Отчет за январь");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBe("/Документы/Работа");
       });
 
       it("должен возвращать путь из глубоко вложенного leaf", () => {
-        const service = createTreeService(
-          mockNavigate,
-          "/Документы/Работа/Проекты/Проект А",
-        );
+        const service = createDataService("/Документы/Работа/Проекты/Проект А");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBe("/Документы/Работа/Проекты");
       });
@@ -332,7 +325,7 @@ describe("createDataService", () => {
       it.skip("должен возвращать родительскую папку для leaf в корне", () => {
         // Если бы у нас был leaf в корне (в текущих тестовых данных нет)
         // Это тест на будущее
-        const service = createTreeService(mockNavigate, "/ЛичныйФайл");
+        const service = createDataService("/ЛичныйФайл");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBe("/");
       });
@@ -340,23 +333,20 @@ describe("createDataService", () => {
 
     describe("Пограничные случаи для navigateToParent", () => {
       it('должен возвращать null из "none" состояния', () => {
-        const service = createTreeService(mockNavigate, "/НесуществующаяПапка");
+        const service = createDataService("/НесуществующаяПапка");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBeNull();
       });
 
       it("должен корректно обрабатывать пути с лишними слэшами", () => {
-        const service = createTreeService(
-          mockNavigate,
-          "//Документы//Работа//",
-        );
+        const service = createDataService("//Документы//Работа//");
         expect(service.getType()).toBe("folder");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBe("/Документы");
       });
 
       it("должен корректно обрабатывать пути с пробелами на концах", () => {
-        const service = createTreeService(mockNavigate, "/Документы/Работа ");
+        const service = createDataService("/Документы/Работа ");
         expect(service.getType()).toBe("folder");
         const parentPath = service.navigateToParent();
         expect(parentPath).toBe("/Документы");

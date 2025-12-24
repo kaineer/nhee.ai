@@ -1,0 +1,202 @@
+.container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 20%;
+  min-width: 250px;
+  max-width: 350px;
+  margin: 0;
+  padding: 20px;
+  background-color: #eceff4; /* Nord: nord6 */
+  border-right: 1px solid #d8dee9; /* Nord: nord4 */
+  overflow-y: auto;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.container + .container {
+  position: fixed;
+  left: 20%;
+  border-right: none;
+  border-left: 1px solid #d8dee9;
+}
+
+/* Стиль для второго и последующих контейнеров */
+.container:nth-child(2) {
+  left: 20%; /* Смещаем второй контейнер на ширину первого */
+  border-left: 1px solid #d8dee9;
+  border-right: 1px solid #d8dee9;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  background: #e5e9f0; /* Nord: nord5 */
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.listItem:hover {
+  background: #d8dee9; /* Nord: nord4 */
+  transform: translateX(3px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Класс для выбранного элемента (добавляется программно) */
+.listItem.selected {
+  background: var(--color-nord4); /* Nord: nord4 */
+  border-color: var(--color-nord9); /* Nord: nord9 */
+  border-width: 2px;
+  box-shadow: 0 0 0 3px rgba(94, 129, 172, 0.2); /* Nord: nord9 с прозрачностью */
+  position: relative;
+}
+
+.listItem.selected::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 60%;
+  background-color: #5e81ac; /* Nord: nord9 */
+  border-radius: 3px;
+}
+
+.defaultItem {
+  color: #2e3440; /* Nord: nord0 */
+  font-size: 15px;
+  line-height: 1.5;
+  text-align: left;
+  word-break: break-word;
+  width: 100%;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.emptyContainer {
+  text-align: center;
+  padding: 30px 20px;
+  color: #4c566a; /* Nord: nord3 */
+  font-size: 16px;
+  background: #e5e9f0; /* Nord: nord5 */
+  border-radius: 8px;
+  border: 2px dashed #d8dee9; /* Nord: nord4 */
+  font-style: italic;
+  margin-top: 20px;
+}
+
+/* Полоса прокрутки в стиле Nord */
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: #e5e9f0; /* Nord: nord5 */
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: #d8dee9; /* Nord: nord4 */
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background: #5e81ac; /* Nord: nord9 */
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 1024px) {
+  .container {
+    width: 25%;
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 280px;
+    position: relative;
+    height: auto;
+    max-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #d8dee9; /* Nord: nord4 */
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .listItem.selected::after {
+    right: auto;
+    left: -5px;
+    top: auto;
+    bottom: -5px;
+    transform: none;
+    width: 60%;
+    height: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .list {
+    grid-template-columns: 1fr;
+  }
+
+  .listItem {
+    padding: 12px;
+    min-height: 70px;
+  }
+}
+
+/* Дополнительные классы для состояния загрузки (если нужно) */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #d8dee9; /* Nord: nord4 */
+  border-top: 3px solid #5e81ac; /* Nord: nord9 */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
