@@ -1,52 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { createDataService } from "./dataService";
+import { createTreeService } from "./treeService";
 import { type DataNode } from "./types";
+import { mockData, mockContent, mockNavigate } from "./treeService.mocks";
 
-// Мок-данные для тестирования
-const mockData: DataNode[] = [
-  {
-    type: "folder",
-    name: "Документы",
-    createdAt: "2023-01-15T10:30:00Z",
-    updatedAt: "2023-05-20T14:25:00Z",
-    children: [
-      {
-        type: "folder",
-        name: "Работа",
-        createdAt: "2023-02-10T09:15:00Z",
-        children: [
-          {
-            type: "leaf",
-            name: "Отчет за январь",
-            createdAt: "2023-01-31T17:45:00Z",
-            updatedAt: "2023-02-05T11:20:00Z",
-            contentType: "markdown",
-            tags: ["финансы", "отчет", "январь"],
-            content: "# Отчет\n## Основные показатели",
-          },
-        ],
-      },
-      {
-        type: "leaf",
-        name: "Личная заметка",
-        createdAt: "2023-03-01T13:20:00Z",
-        contentType: "html",
-        tags: ["личное"],
-        content: "<h1>Личная заметка</h1><p>Текст</p>",
-      },
-    ],
-  },
-  {
-    type: "leaf",
-    name: "Корневой файл",
-    createdAt: "2023-04-12T11:10:00Z",
-    contentType: "markdown",
-    tags: ["тест"],
-    content: "# Корневой файл",
-  },
-];
-
-const createMockService = (path: string) => createDataService(mockData, path);
+const createMockService = (path: string) => createTreeService(mockData, path);
 
 describe("createDataService", () => {
   describe("Корневой уровень", () => {
@@ -187,27 +144,8 @@ describe("createDataService", () => {
   });
 
   describe("getContent для разных contentType", () => {
-    const mockedData: DataNode[] = [
-      {
-        type: "leaf",
-        name: "Markdown файл",
-        createdAt: "2023-01-01T00:00:00Z",
-        contentType: "markdown",
-        tags: ["test"],
-        content: "**Жирный текст** и [ссылка](https://example.com)",
-      },
-      {
-        type: "leaf",
-        name: "HTML файл",
-        createdAt: "2023-01-01T00:00:00Z",
-        contentType: "html",
-        tags: ["test"],
-        content: '<div class="test"><p>HTML content</p></div>',
-      },
-    ];
-
     it("должен корректно конвертировать markdown с форматированием", () => {
-      const service = createDataService(mockedData, "/Markdown файл");
+      const service = createTreeService(mockContent, "/Markdown файл");
       const content = service.getContent();
 
       expect(content).toContain("<strong>Жирный текст</strong>");
@@ -215,10 +153,114 @@ describe("createDataService", () => {
     });
 
     it("должен возвращать HTML без изменений", () => {
-      const service = createDataService(mockedData, "/HTML файл");
+      const service = createTreeService(mockContent, "/HTML файл");
       const content = service.getContent();
 
       expect(content).toBe('<div class="test"><p>HTML content</p></div>');
+    });
+  });
+
+  describe("navigateTo", () => {
+    let service = null;
+    describe("Из корневого уровня", () => {
+      beforeEach(() => {
+        service = createTreeService(mockNavigate, "/");
+      });
+
+      it("должен возвращать путь к существующей папке из корня", () => {
+        const newPath = service.navigateTo("Документы");
+        expect(newPath).toBe("/Документы");
+      });
+
+      it('должен возвращать путь к папке "Заметки" из корня', () => {
+        const newPath = service.navigateTo("Заметки");
+        expect(newPath).toBe("/Заметки");
+      });
+
+      it("должен возвращать null при попытке перейти к несуществующему элементу из корня", () => {
+        const newPath = service.navigateTo("НесуществующаяПапка");
+        expect(newPath).toBeNull();
+      });
+
+      it("должен корректно обрабатывать пробелы в именах", () => {
+        const newPath = service.navigateTo("Документы");
+        expect(newPath).toBe("/Документы");
+      });
+    });
+
+    describe("Из папки первого уровня", () => {
+      beforeEach(() => {
+        service = createTreeService(mockNavigate, "/Документы");
+      });
+
+      it("должен возвращать путь к вложенной папке", () => {
+        const newPath = service.navigateTo("Работа");
+        expect(newPath).toBe("/Документы/Работа");
+      });
+
+      it("должен возвращать путь к листовому элементу", () => {
+        const newPath = service.navigateTo("Личная заметка");
+        expect(newPath).toBe("/Документы/Личная заметка");
+      });
+
+      it("должен возвращать null при попытке перейти к несуществующему элементу", () => {
+        const newPath = service.navigateTo("НесуществующийФайл");
+        expect(newPath).toBeNull();
+      });
+
+      it("не должен позволять навигацию из leaf элемента", () => {
+        service = createTreeService(mockNavigate, "/Документы/Личная заметка");
+        const newPath = service.navigateTo("ЛюбойФайл");
+        expect(newPath).toBeNull();
+      });
+    });
+
+    describe("Из вложенной папки", () => {
+      beforeEach(() => {
+        service = createTreeService(mockNavigate, "/Документы/Работа");
+      });
+
+      it("должен возвращать путь к глубоко вложенному элементу", () => {
+        const newPath = service.navigateTo("Проекты");
+        expect(newPath).toBe("/Документы/Работа/Проекты");
+      });
+
+      it("должен возвращать путь к листу из вложенной папки", () => {
+        const newPath = service.navigateTo("Отчет за январь");
+        expect(newPath).toBe("/Документы/Работа/Отчет за январь");
+      });
+
+      it("должен возвращать путь к элементу на 3 уровне вложенности", () => {
+        service = createTreeService(mockNavigate, "/Документы/Работа/Проекты");
+        const newPath = service.navigateTo("Проект А");
+        expect(newPath).toBe("/Документы/Работа/Проекты/Проект А");
+      });
+    });
+
+    describe("Пограничные случаи для navigateTo", () => {
+      it('должен возвращать null при попытке навигации из "none" состояния', () => {
+        const service = createTreeService(mockNavigate, "/НесуществующаяПапка");
+        const newPath = service.navigateTo("ЛюбойЭлемент");
+        expect(newPath).toBeNull();
+      });
+
+      it("должен корректно обрабатывать пустое имя", () => {
+        const service = createTreeService(mockNavigate, "/");
+        const newPath = service.navigateTo("");
+        expect(newPath).toBeNull();
+      });
+
+      it("должен корректно обрабатывать имя с лишними пробелами", () => {
+        const service = createTreeService(mockNavigate, "/Документы");
+        const newPath = service.navigateTo("  Работа  ");
+        expect(newPath).toBe("/Документы/Работа");
+      });
+
+      it("должен учитывать регистр при поиске элемента", () => {
+        const service = createTreeService(mockNavigate, "/");
+        const newPath = service.navigateTo("документы"); // строчные буквы
+        expect(newPath).toBeNull(); // или '/Документы' в зависимости от реализации (регистрозависимости)
+      });
     });
   });
 });
