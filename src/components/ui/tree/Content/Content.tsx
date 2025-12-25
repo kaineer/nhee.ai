@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { treeSlice } from "../../../../store/slices/treeSlice";
+import { treeSlice } from "@slices/treeSlice";
 import { FolderPlaceholder } from "../FolderPlaceholder/FolderPlaceholder";
 
 export const Content = () => {

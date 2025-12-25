@@ -1,4 +1,3 @@
-import React from "react";
 import classes from "./FolderPlaceholder.module.css";
 
 export const FolderPlaceholder = () => {

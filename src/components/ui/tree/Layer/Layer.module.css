@@ -5,14 +5,13 @@
   margin: 0;
   padding: 10px;
   background-color: var(--color-tree); /* Nord: nord6 */
-  border-right: 1px solid #d8dee9; /* Nord: nord4 */
+  /* border-right: 1px solid var(--color-nord6); /* Nord: nord4 */
   overflow-y: auto;
   z-index: 100;
   box-sizing: border-box;
 }
 
 .container + .container {
-  left: 20%;
   border-right: none;
   border-left: 1px solid #d8dee9;
 }

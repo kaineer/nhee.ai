@@ -65,6 +65,13 @@
     ]
   },
   {
+    "name": "Черновик без тегов",
+    "createdAt": "2023-07-01T10:00:00Z",
+    "type": "leaf",
+    "contentType": "markdown",
+    "content": "Это тестовый документ без тегов."
+  },
+  {
     "name": "Заметки",
     "createdAt": "2023-04-12T11:10:00Z",
     "updatedAt": "2023-06-22T10:30:00Z",
@@ -88,13 +95,6 @@
         "content": "<div class=\"recipe\">\n  <h2>Салат \"Цезарь\"</h2>\n  <h3>Ингредиенты:</h3>\n  <ul>\n    <li>Листья салата - 200г</li>\n    <li>Куриное филе - 300г</li>\n    <li>Сухарики - 100г</li>\n    <li>Сыр пармезан - 50г</li>\n    <li>Соус цезарь - по вкусу</li>\n  </ul>\n</div>"
       }
     ]
-  },
-  {
-    "name": "Черновик без тегов",
-    "createdAt": "2023-07-01T10:00:00Z",
-    "type": "leaf",
-    "contentType": "markdown",
-    "content": "Это тестовый документ без тегов."
   },
   {
     "name": "HTML страница abcdef abcdef abcdef abcdef abcdef abcdef ",

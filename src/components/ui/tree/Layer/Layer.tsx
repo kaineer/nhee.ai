@@ -1,9 +1,9 @@
 import classes from "./Layer.module.css";
-import { treeSlice } from "../../../../store/slices/treeSlice";
-import clsx from "clsx";
+import { treeSlice } from "@slices/treeSlice";
 import { useEffect, type KeyboardEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { Item } from "../Item/Item";
 
 interface Props {
   layerIndex: number;
@@ -63,21 +63,19 @@ export const Layer = ({ layerIndex, last }: Props) => {
     prevItem,
     navigateInto,
     navigateUp,
+    navigate,
   ]);
 
   return (
     <div className={classes.container}>
       <div className={classes.list}>
         {items.map((item, index) => (
-          <div
+          <Item
             key={index}
-            className={clsx(classes.listItem, {
-              [classes.selected]: item.name === layer.currentName,
-            })}
+            name={item.name}
+            current={item.name === layer.currentName}
             onClick={handleClick(item.name)}
-          >
-            {item.name}
-          </div>
+          />
         ))}
       </div>
     </div>

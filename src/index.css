@@ -25,13 +25,18 @@ body {
   --color-nord14: #d08770;
   --color-nord15: #e5786d;
 
-  --color-nord-snow100: #eceff4;
-  --color-nord-snow200: #e5e9f0;
-  --color-nord-snow300: #d8dee9;
+  --nord-snow100: #eceff4;
+  --nord-snow200: #e5e9f0;
+  --nord-snow300: #d8dee9;
 
-  --color-search: var(--color-nord-snow100);
-  --color-tag: var(--color-nord-snow200);
-  --color-tree: var(--color-nord-snow300);
+  --nord-night100: #2e3440;
+  --nord-night200: #3b4252;
+  --nord-night300: #434c5e;
+  --nord-night400: #4c566a;
+
+  --color-search: var(--nord-snow100);
+  --color-tag: var(--nord-snow200);
+  --color-tree: var(--nord-snow300);
 }
 
 #root {
