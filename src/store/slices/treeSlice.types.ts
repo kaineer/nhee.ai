@@ -2,7 +2,7 @@ import type { DataNode } from "src/services/types";
 
 type TreeNodeType = "leaf" | "folder";
 
-interface BaseTreeNode {
+export interface BaseTreeNode {
   type: TreeNodeType;
   name: string;
 }

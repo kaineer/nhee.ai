@@ -1,9 +1,9 @@
 import classes from "./Layer.module.css";
-import { type TreeLayer } from "../../../../store/slices/treeSlice.types";
 import { treeSlice } from "../../../../store/slices/treeSlice";
 import clsx from "clsx";
 import { useEffect, type KeyboardEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 interface Props {
   layerIndex: number;
@@ -11,12 +11,26 @@ interface Props {
 }
 
 export const Layer = ({ layerIndex, last }: Props) => {
-  const { nextItem, prevItem, navigateInto, navigateUp } = treeSlice.actions;
+  const {
+    nextItem,
+    prevItem,
+    selectItem,
+    navigateInto,
+    navigateUp,
+    setCurrentLayer,
+  } = treeSlice.actions;
+
   const { getLayers } = treeSlice.selectors;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const layers = useSelector(getLayers);
   const layer = layers[layerIndex];
   const items = layer.childrenNodes;
+
+  const handleClick = (name: string) => () => {
+    dispatch(setCurrentLayer(layerIndex));
+    dispatch(selectItem(name));
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -28,7 +42,11 @@ export const Layer = ({ layerIndex, last }: Props) => {
         } else if (e.code === "KeyL") {
           dispatch(navigateInto(layer.currentName));
         } else if (e.code === "KeyH") {
-          dispatch(navigateUp());
+          if (layers.length === 1) {
+            navigate("/");
+          } else {
+            dispatch(navigateUp());
+          }
         }
       }
     };
@@ -36,7 +54,16 @@ export const Layer = ({ layerIndex, last }: Props) => {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [dispatch, last, layers, layer.currentName, nextItem, prevItem]);
+  }, [
+    dispatch,
+    last,
+    layers,
+    layer.currentName,
+    nextItem,
+    prevItem,
+    navigateInto,
+    navigateUp,
+  ]);
 
   return (
     <div className={classes.container}>
@@ -47,6 +74,7 @@ export const Layer = ({ layerIndex, last }: Props) => {
             className={clsx(classes.listItem, {
               [classes.selected]: item.name === layer.currentName,
             })}
+            onClick={handleClick(item.name)}
           >
             {item.name}
           </div>

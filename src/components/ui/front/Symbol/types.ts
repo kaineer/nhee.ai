@@ -5,3 +5,9 @@ export const navigationSymbols: Record<SymbolType, string> = {
   search: "/",
   tree: ".",
 } as const;
+
+export const navigationKeys: Record<SymbolType, string> = {
+  tag: "Digit3",
+  search: "Slash",
+  tree: "Period",
+} as const;

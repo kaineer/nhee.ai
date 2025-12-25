@@ -1,13 +1,16 @@
 import { markdown } from "markdown";
 import type { DataNode, FolderNode, LeafNode, Named, RootNode } from "./types";
 
-const getSubItem = (item: DataNode, name: string): DataNode | undefined => {
+const getSubItem = (
+  item: DataNode | undefined,
+  name: string,
+): DataNode | undefined => {
   if (!item) return void 0;
 
   const { type } = item;
   if (["root", "folder"].includes(type)) {
     const { children } = item as FolderNode;
-    const hasName = (it: DataNode) => (it as Named).name === name;
+    const hasName = (it: DataNode) => (it as Named).name.trim() === name.trim();
     return (children || []).find(hasName) || void 0;
   }
   return void 0;
@@ -52,7 +55,15 @@ const findItem = (root: DataNode, path: string): DataNode | undefined => {
   return item;
 };
 
-export const createTreeService = (data: DataNode[], path: string) => {
+const defaultPath: string = "";
+const defaultNodeList: DataNode[] = [];
+
+export const createTreeService = (
+  nodeList: DataNode[] | null,
+  startPath: string | null,
+) => {
+  const path = startPath || defaultPath;
+  const data = nodeList || defaultNodeList;
   const root: RootNode = { type: "root", children: data };
   const item: DataNode | undefined = findItem(root, path);
 
@@ -80,13 +91,16 @@ export const createTreeService = (data: DataNode[], path: string) => {
     return void 0;
   };
 
-  const navigateTo = (subName: string): string | null => {
-    const trimmedSubName = subName.trim();
-    const subItem = getSubItem(item, trimmedSubName);
-    return subItem ? joinPath(path, trimmedSubName) : null;
+  const navigateTo = (subName: string | null): string | null => {
+    if (subName) {
+      const trimmedSubName = subName.trim();
+      const subItem = getSubItem(item, trimmedSubName);
+      return subItem ? joinPath(path, trimmedSubName) : null;
+    }
+    return path;
   };
 
-  const navigateToParent = (): string => {
+  const navigateToParent = (): string | null => {
     if (!item) return null;
     return getParentPath(path);
   };

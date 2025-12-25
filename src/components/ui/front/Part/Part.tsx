@@ -51,7 +51,7 @@ export const Part = ({ symbolType, index, onExpanded }: Props) => {
           from={ref.current}
           to={ref.current.parentElement!}
           onAnimationComplete={animationComplete}
-          duration={500}
+          duration={300}
         />
       )}
     </>

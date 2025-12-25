@@ -1,0 +1,29 @@
+.folderPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.folderIconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.folderIconContainer:hover {
+  transform: scale(1.05);
+}
+
+.folderIcon {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}

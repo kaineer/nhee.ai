@@ -1,8 +1,9 @@
 /* import react */
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router";
 
 /* import types */
-import { type SymbolType, navigationSymbols } from "./types";
+import { type SymbolType, navigationSymbols, navigationKeys } from "./types";
 
 /* import classes */
 import classes from "./Symbol.module.css";
@@ -17,6 +18,21 @@ interface Props {
 export const Symbol = ({ type }: Props) => {
   const symbolRef = useRef<HTMLDivElement>(null);
   const navigationSymbol = navigationSymbols[type];
+  const navigationKey = navigationKeys[type];
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleKeydown = (e) => {
+      if (e.code === navigationKey) {
+        navigate("/" + type);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeydown);
+
+    return () => window.removeEventListener("keydown", handleKeydown);
+  }, [navigate, navigationKey, type]);
 
   useEffect(() => {
     const updateSize = () => {

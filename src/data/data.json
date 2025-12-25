@@ -103,6 +103,6 @@
     "type": "leaf",
     "contentType": "html",
     "tags": ["тест", "html"],
-    "content": "<!DOCTYPE html>\n<html>\n<head>\n  <title>Тестовая страница</title>\n  <style>\n    body { font-family: Arial, sans-serif; }\n    .container { max-width: 800px; margin: 0 auto; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>Привет, мир!</h1>\n    <p>Это тестовая HTML страница.</p>\n  </div>\n</body>\n</html>"
+    "content": "<div class=\"container\">\n    <h1>Привет, мир!</h1>\n    <p>Это тестовая HTML страница.</p>\n  </div>"
   }
 ]

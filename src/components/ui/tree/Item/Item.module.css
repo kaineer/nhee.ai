@@ -1,0 +1,56 @@
+.listItem {
+  background: #e5e9f0; /* Nord: nord5 */
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.listItem:hover {
+  background: #d8dee9; /* Nord: nord4 */
+  transform: translateX(3px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Класс для выбранного элемента (добавляется программно) */
+.listItem.selected {
+  background: var(--color-nord4); /* Nord: nord4 */
+  border-color: var(--color-nord9); /* Nord: nord9 */
+  border-width: 2px;
+  box-shadow: 0 0 0 3px rgba(94, 129, 172, 0.2); /* Nord: nord9 с прозрачностью */
+  position: relative;
+}
+
+.listItem.selected::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 60%;
+  background-color: #5e81ac; /* Nord: nord9 */
+  border-radius: 3px;
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .list {
+    grid-template-columns: 1fr;
+  }
+
+  .listItem {
+    padding: 12px;
+    min-height: 70px;
+  }
+}

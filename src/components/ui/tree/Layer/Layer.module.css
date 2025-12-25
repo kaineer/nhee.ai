@@ -1,14 +1,10 @@
 .container {
-  position: fixed;
-  left: 0;
-  top: 0;
   height: 100vh;
-  width: 20%;
+  width: 15%;
   min-width: 250px;
-  max-width: 350px;
   margin: 0;
-  padding: 20px;
-  background-color: #eceff4; /* Nord: nord6 */
+  padding: 10px;
+  background-color: var(--color-tree); /* Nord: nord6 */
   border-right: 1px solid #d8dee9; /* Nord: nord4 */
   overflow-y: auto;
   z-index: 100;
@@ -16,7 +12,6 @@
 }
 
 .container + .container {
-  position: fixed;
   left: 20%;
   border-right: none;
   border-left: 1px solid #d8dee9;
